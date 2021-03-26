@@ -1,6 +1,6 @@
 import {Command, flags} from '@oclif/command'
 import got from 'got'
-import {credentials} from '../../utils'
+const utils = require('../../utils')
 
 export default class List extends Command {
   static description = 'fetch list of invoices'
@@ -19,7 +19,7 @@ export default class List extends Command {
   ]
 
   async run() {
-    const {username, password, endpoint} = await credentials(this)
+    const {username, password, endpoint} = await utils.credentials(this)
 
     const {args} = this.parse(List)
 
@@ -34,7 +34,7 @@ export default class List extends Command {
           page_size: args.limit,
         },
       })
-      this.log(body)
+      this.log(JSON.stringify(body))
     } catch (error) {
       this.error(error.response.body)
     }

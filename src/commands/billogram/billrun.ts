@@ -1,5 +1,5 @@
 import {Command, flags} from '@oclif/command'
-import {credentials, create_billogram, create_customer} from '../../utils'
+const utils = require('../../utils')
 
 export default class Billrun extends Command {
   static description = 'build oclif'
@@ -19,18 +19,18 @@ export default class Billrun extends Command {
   async run() {
     const {flags} = this.parse(Billrun)
 
-    const config = await credentials(this)
+    const config = await utils.credentials(this)
 
     const chunk = parseInt(flags.chunk, 10)
 
     for (let i = 0, j = parseInt(flags.limit, 10); i < j; i += chunk) {
       /* eslint-disable no-await-in-loop */
-      const {body} = await create_customer(config)
+      const {body} = await utils.create_customer(config)
       const customerNumber = body.data.customer_no
       this.log('Created customer with customer number:', body.data.customer_no)
 
       const promises = [...new Array(chunk).keys()].map(async () => {
-        const {body} = await create_billogram(config, customerNumber)
+        const {body} = await utils.create_billogram(config, customerNumber)
         this.log('Created invoice with ID:', body.data.id)
       })
 

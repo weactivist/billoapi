@@ -1,5 +1,5 @@
 import {Command, flags} from '@oclif/command'
-import {credentials, create_billogram} from '../../utils'
+const utils = require('../../utils')
 
 export default class CreateBillogram extends Command {
   static description = 'create a single invoice'
@@ -17,12 +17,12 @@ export default class CreateBillogram extends Command {
   ]
 
   async run() {
-    const config = await credentials(this)
+    const config = await utils.credentials(this)
 
     const {args} = this.parse(CreateBillogram)
 
     try {
-      const {body} = await create_billogram(config, args.customerNumber)
+      const {body} = await utils.create_billogram(config, args.customerNumber)
       this.log('Created invoice with ID:', body.data.id)
     } catch (error) {
       this.error(error.response.body)

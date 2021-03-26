@@ -1,5 +1,5 @@
 import {Command, flags} from '@oclif/command'
-import {credentials, create_customer} from '../../utils'
+const utils = require('../../utils')
 
 export default class Create extends Command {
   static description = 'create a single customer'
@@ -15,10 +15,10 @@ export default class Create extends Command {
   static args = []
 
   async run() {
-    const config = await credentials(this)
+    const config = await utils.credentials(this)
 
     try {
-      const {body} = await create_customer(config)
+      const {body} = await utils.create_customer(config)
       this.log('Created customer with customer number:', body.data.customer_no)
       return body.data.customer_no
     } catch (error) {
