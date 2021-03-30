@@ -19,11 +19,15 @@ async function credentials(ctx) {
       ctx.exit(0)
     }
 
+    const choices = Object.keys(identifiers).sort((a, b) => {
+      return a === 'default' ? -1 : b === 'default' ? 1 : 0
+    })
+
     const responses = await inquirer.prompt([{
       name: 'credential',
       message: 'select credentials',
       type: 'list',
-      choices: Object.keys(identifiers),
+      choices: choices,
     }])
 
     return identifiers[responses.credential]
